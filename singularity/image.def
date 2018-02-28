@@ -1,0 +1,25 @@
+BootStrap: docker
+From: ubuntu:latest
+
+%environment
+    PATH=/app/fizkin/scripts:$PATH
+    LD_LIBRARY_PATH=/usr/local/lib
+
+%runscript
+    exec graftM
+
+%post
+    apt-get update
+    apt-get install -y locales python python-pip
+    locale-gen en_US.UTF-8
+
+    pip install --upgrade pip
+    pip install numpy 
+    pip install graftm
+
+    #
+    # Mount points for TACC directories
+    #
+    mkdir /home1
+    mkdir /scratch
+    mkdir /work
