@@ -1,0 +1,453 @@
+{"available":true,
+ "checkpointable":false,
+ "defaultMemoryPerNode":32,
+ "defaultProcessorsPerNode":16,
+ "defaultMaxRunTime":"12:00:00",
+ "defaultNodeCount":1,
+ "defaultQueue":"normal",
+ "deploymentPath":"kyclark/applications/graftm-0.11.1/stampede2",
+ "deploymentSystem":"data.iplantcollaborative.org",
+ "executionSystem":"tacc-stampede2-kyclark",
+ "executionType":"HPC",
+ "helpURI":"https://github.com/geronimp/graftM",
+ "label": "graftM",
+ "longDescription":"Rapid community profiles from metagenomes",
+ "modules":["load tacc-singularity"],
+ "name":"graftm",
+ "ontology":["http://sswapmeet.sswap.info/agave/apps/Application"],
+ "parallelism":"SERIAL",
+ "shortDescription":"Rapid community profiles from metagenomes",
+ "tags":["graftm", "metagenome"],
+ "templatePath":"template.sh",
+ "testPath":"test.sh",
+ "version":"0.11.1",
+ "inputs":[
+    {"id":"FORWARD",
+     "value":
+        {"default":"",
+         "order":1,
+         "required":true,
+         "validator":"",
+         "visible":true},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "minCardinality":1,
+         "maxCardinality":-1,
+         "fileTypes":["raw-0"]},
+     "details":
+        {"description":"List/directory of FASTA|Q(.gz) files to compare",
+         "label":"Single/forward reads",
+         "argument":"-f ",
+         "repeatArgument":true,
+         "showArgument":true}
+    },
+    {"id":"REVERSE",
+     "value":
+        {"default":"",
+         "order":2,
+         "required":true,
+         "validator":"",
+         "visible":true},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "minCardinality":1,
+         "maxCardinality":-1,
+         "fileTypes":["raw-0"]},
+     "details":
+        {"description":"List/directory of FASTA|Q(.gz) files to compare",
+         "label":"Reverse reads",
+         "argument":"-r ",
+         "repeatArgument":true,
+         "showArgument":true}
+    },
+    {"id":"GRAFTM_PACKAGE",
+     "value":
+        {"default":"",
+         "order":3,
+         "required":false,
+         "validator":"",
+         "visible":true},
+     "semantics": {"ontology":["xsd:string"]},
+     "details":
+        {"description":"The path to the GraftM package containing the HMM, reference package, etc.",
+         "label":"GraftM Package",
+         "argument":"--graftm_package ",
+         "showArgument":true}
+    },
+    {"id":"DECOY_DATABASE",
+     "value":
+        {"default":"",
+         "order":4,
+         "required":false,
+         "validator":"",
+         "visible":true},
+     "semantics": {"ontology":["xsd:string"]},
+     "details":
+        {"description":"Path to a diamond database. Sequences with better hits to these proteins will be excluded.",
+         "label":"Decoy database",
+         "argument":"--decoy_database ",
+         "showArgument":true}
+    },
+    {"id":"EXPAND_SEARCH_CONTIGS",
+     "value":
+        {"default":"",
+         "order":5,
+         "required":false,
+         "validator":"",
+         "visible":true},
+     "semantics": {"ontology":["xsd:string"]},
+     "details":
+        {"description":"Provide an assembly of the sample being searched. This assembly will initially be searched for full length genes, from which a sample specific HMM model will be created and used in the search step of graftM.",
+         "label":"Expand search contigs",
+         "argument":"--expand_search_contigs ",
+         "showArgument":true}
+    },
+    {"id":"SEARCH_HMM_FILES",
+     "value":
+        {"default":"",
+         "order":6,
+         "required":false,
+         "validator":"",
+         "visible":true},
+     "semantics": {"ontology":["xsd:string"]},
+     "details":
+        {"description":"Specify a list of paths to custom HMM(s) to search the data with.",
+         "label":"Search HMM files",
+         "argument":"--search_hmm_files ",
+         "showArgument":true}
+    },
+    {"id":"SEARCH_DIAMOND_FILE",
+     "value":
+        {"default":"",
+         "order":7,
+         "required":false,
+         "validator":"",
+         "visible":true},
+     "semantics": {"ontology":["xsd:string"]},
+     "details":
+        {"description":"Specify a DIAMOND database with which to search/classify the reads.",
+         "label":"Search DIAMOND file",
+         "argument":"--search_diamond_file ",
+         "showArgument":true}
+    },
+    {"id":"ALN_HMM_FILE",
+     "value":
+        {"default":"",
+         "order":8,
+         "required":false,
+         "validator":"",
+         "visible":true},
+     "semantics": {"ontology":["xsd:string"]},
+     "details":
+        {"description":"Reads will be aligned to this HMM after identification. N.B. This option can only be used if no placement is required.",
+         "label":"Align HMM file",
+         "argument":"--aln_hmm_file ",
+         "showArgument":true}
+    },
+    {"id":"EUK_HMM_FILE",
+     "value":
+        {"default":"",
+         "order":9,
+         "required":false,
+         "validator":"",
+         "visible":true},
+     "semantics": {"ontology":["xsd:string"]},
+     "details":
+        {"description":"The HMM that is used in the Eukaryotic contamination screen",
+         "label":"Euk HMM file",
+         "argument":"--aln_hmm_file ",
+         "showArgument":true}
+    }
+  ],
+  "parameters": [
+    {
+      "id": "INPUT_SEQUENCE_TYPE",
+      "value": {
+          "type": "enumeration",
+          "default": "nucleotide",
+          "order": 1,
+          "required": false,
+          "enumValues": [
+            { "nucleotide": "nucleotide" },
+            { "aminoacid" : "aminoacid" }
+          ],
+          "visible": true
+      },
+      "details": {
+          "description": "Specify whether the input sequence is 'nucleotide' or 'aminoacid' sequence data",
+          "label": "Input sequence type",
+          "argument": "--input_sequence_type ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "FILTER_MINIMUM",
+      "value": {
+          "type": "string",
+          "default": "",
+          "order": 2,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Minimum number of positions that must be aligned for a sequence to be placed in the phylogenetic tree (default: 95bp for nucleotide packages, 30 aa for protein packages)",
+          "label": "Filter minimum",
+          "argument": "--filter_minimum ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "EVALUE",
+      "value": {
+          "type": "string",
+          "default": "1e-5",
+          "order": 3,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Specify the evalue cutoff for the hmmsearch, if you would like to use a cutoff different to the default or the trusted cutoff (TC) within the HMM.",
+          "label": "E-value",
+          "argument": "--evalue ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "SEARCH_AND_ALIGN_ONLY",
+      "value": {
+          "type": "flag",
+          "default": false,
+          "order": 4,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Stop GraftM running after reads have been identified and aligned (i.e. no placement step)",
+          "label": "Search and align only",
+          "argument": "--search_and_align_only ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "SEARCH_ONLY",
+      "value": {
+          "type": "flag",
+          "default": false,
+          "order": 5,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Stop GraftM running after reads have been identified (i.e. no alignment or placement steps)",
+          "label": "Search only",
+          "argument": "--search_only ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "EUK_CHECK",
+      "value": {
+          "type": "flag",
+          "default": false,
+          "order": 6,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Cross check identified reads using an 18S specific HMM to help filter out eukaryotic ribosomal reads",
+          "label": "Euk check",
+          "argument": "--euk_check ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "SEARCH_METHOD",
+      "value": {
+          "type": "enumeration",
+          "default": "hmmsearch",
+          "order": 7,
+          "required": false,
+          "enumValues": [
+            { "hmmsearch": "hmmsearch" },
+            { "hmmsearch": "hmmsearch" },
+            { "hmmsearch+diamond" : "hmmsearch+diamond" }
+          ],
+          "visible": true
+      },
+      "details": {
+          "description": "",
+          "label": "Search method",
+          "argument": "--search_method ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "MAXIMUM_RANGE",
+      "value": {
+          "type": "string",
+          "default": "",
+          "order": 8,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Maximum range to use when searching for potentially linked reads (when searching contigs)",
+          "label": "Maxium range",
+          "argument": "--maximum_range ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "ASSIGNMENT_METHOD",
+      "value": {
+          "type": "enumeration",
+          "default": "pplacer",
+          "order": 9,
+          "required": false,
+          "enumValues": [
+            { "pplacer": "pplacer" },
+            { "diamond" : "diamond" }
+          ],
+          "visible": true
+      },
+      "details": {
+          "description": "Taxonomic assignment method, either pplacer (phylogenetic) or DIAMOND (pairwise).",
+          "label": "Taxonomic assignment method",
+          "argument": "--assigment_method ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "PLACEMENTS_CUTOFF",
+      "value": {
+          "type": "string",
+          "default": "0.75",
+          "order": 10,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "This flag allows you to change the likelihood cutoff for phylogenetic placement of reads.",
+          "label": "Placements cuttoff",
+          "argument": "--placements_cutoff ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "RESOLVE_PLACEMENTS",
+      "value": {
+          "type": "flag",
+          "default": false,
+          "order": 11,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Ignore the placements cutoff and simply use the best placement assigned to the read.",
+          "label": "Resolve placements",
+          "argument": "--resolve_placements ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "NO_MERGE_READS",
+      "value": {
+          "type": "flag",
+          "default": false,
+          "order": 12,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "When this flag is specified, the alignment of the forward and reverse reads will not be merged before placement. If paired reads are provided, pair with the most confident placement will be used for classification.",
+          "label": "No merge reads",
+          "argument": "--no_merge_reads ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "MIN_ORF_LENGTH",
+      "value": {
+          "type": "string",
+          "default": "96",
+          "order": 13,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Minimum number of nucleotides in an open reading frame",
+          "label": "Min ORF length",
+          "argument": "--min_orf_length ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "RESTRICT_READ_LENGTH",
+      "value": {
+          "type": "string",
+          "default": "",
+          "order": 14,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "Only use this many base pairs at the start of each sequence searched",
+          "label": "Restrict read length",
+          "argument": "--restrict_read_length ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "VERBOSITY",
+      "value": {
+          "type": "enumeration",
+          "default": "4",
+          "order": 15,
+          "required": false,
+          "enumValues": [
+            { "1": "1 (silent)" },
+            { "2": "2" },
+            { "3" : "3" },
+            { "4" : "4 (default)" },
+            { "5" : "5 (noise)" }
+          ],
+          "visible": true
+      },
+      "details": {
+          "description": "",
+          "label": "Search method",
+          "argument": "--search_method ",
+          "showArgument": true
+      }
+    },
+    {
+      "id": "MAX_SAMPLES_FOR_KRONA",
+      "value": {
+          "type": "string",
+          "default": "100",
+          "order": 16,
+          "required": false,
+          "validator": "",
+          "visible": true
+      },
+      "details": {
+          "description": "If the number of samples is greater than this, do not output KRONA diagram",
+          "label": "Max samples for Krona",
+          "argument": "--max_samples_for_krona ",
+          "showArgument": true
+      }
+    }
+  ],
+  "outputs":[]
+}
