@@ -29,6 +29,7 @@ fi
 ARGS=""
 FORWARD=""
 REVERSE=""
+PACKAGE=""
 while (($#)); do
     if [[ $1 == '-f' ]]; then
         FORWARD="$FORWARD $2"
@@ -38,6 +39,9 @@ while (($#)); do
         shift 2
     elif [[ $1 == '-o' ]]; then
         OUT_DIR="$2"
+        shift 2
+    elif [[ $1 == '-p' ]]; then
+        PACKAGE="$2"
         shift 2
     else
         ARGS="$ARGS $1"
@@ -50,6 +54,17 @@ ARGS="$ARGS --output_directory $OUT_DIR --threads 12"
 if [[ -z "$FORWARD" ]]; then
     echo "No -f FORWARD"
     exit 1
+fi
+
+if [[ -z "$PACKAGE" ]]; then
+    PKG_BASE="/work/05066/imicrobe/iplantc.org/data/imicrobe/graftm/packages"
+    PKG_DIR="$PKG_BASE/${PACKAGE}.gpkg"
+    if [[ -d "$PKG_DIR" ]]; then
+        ARGS="$ARGS --graftm_package=$PKG_DIR"
+    else
+        echo "Bad PACKAGE \"$PACKAGE\""
+        exit 1
+    fi
 fi
 
 FORWARD_LIST=$(mktemp)

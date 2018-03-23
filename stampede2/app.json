@@ -22,7 +22,7 @@
  "testPath":"test.sh",
  "version":"0.11.1",
  "inputs":[
-    {"id":"FORWARD",
+    {"id": "FORWARD",
      "value":
         {"default":"",
          "order":1,
@@ -41,16 +41,15 @@
          "repeatArgument":true,
          "showArgument":true}
     },
-    {"id":"REVERSE",
+    {"id": "REVERSE",
      "value":
         {"default":"",
          "order":2,
-         "required":true,
+         "required":false,
          "validator":"",
          "visible":true},
      "semantics":
         {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "minCardinality":1,
          "maxCardinality":-1,
          "fileTypes":["raw-0"]},
      "details":
@@ -60,106 +59,223 @@
          "repeatArgument":true,
          "showArgument":true}
     },
-    {"id":"GRAFTM_PACKAGE",
+    {"id": "GRAFTM_PACKAGE",
      "value":
         {"default":"",
          "order":3,
          "required":false,
          "validator":"",
          "visible":true},
-     "semantics": {"ontology":["xsd:string"]},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "maxCardinality":1,
+         "fileTypes":["raw-0"]},
      "details":
         {"description":"The path to the GraftM package containing the HMM, reference package, etc.",
          "label":"GraftM Package",
          "argument":"--graftm_package ",
          "showArgument":true}
     },
-    {"id":"DECOY_DATABASE",
+    {"id": "DECOY_DATABASE",
      "value":
         {"default":"",
          "order":4,
          "required":false,
          "validator":"",
          "visible":true},
-     "semantics": {"ontology":["xsd:string"]},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "maxCardinality":-1,
+         "fileTypes":["raw-0"]},
      "details":
         {"description":"Path to a diamond database. Sequences with better hits to these proteins will be excluded.",
          "label":"Decoy database",
          "argument":"--decoy_database ",
          "showArgument":true}
     },
-    {"id":"EXPAND_SEARCH_CONTIGS",
+    {"id": "EXPAND_SEARCH_CONTIGS",
      "value":
         {"default":"",
          "order":5,
          "required":false,
          "validator":"",
          "visible":true},
-     "semantics": {"ontology":["xsd:string"]},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "maxCardinality":-1,
+         "fileTypes":["raw-0"]},
      "details":
         {"description":"Provide an assembly of the sample being searched. This assembly will initially be searched for full length genes, from which a sample specific HMM model will be created and used in the search step of graftM.",
          "label":"Expand search contigs",
          "argument":"--expand_search_contigs ",
          "showArgument":true}
     },
-    {"id":"SEARCH_HMM_FILES",
+    {"id": "SEARCH_HMM_FILES",
      "value":
         {"default":"",
          "order":6,
          "required":false,
          "validator":"",
          "visible":true},
-     "semantics": {"ontology":["xsd:string"]},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "maxCardinality":-1,
+         "fileTypes":["raw-0"]},
      "details":
         {"description":"Specify a list of paths to custom HMM(s) to search the data with.",
          "label":"Search HMM files",
          "argument":"--search_hmm_files ",
          "showArgument":true}
     },
-    {"id":"SEARCH_DIAMOND_FILE",
+    {"id": "SEARCH_DIAMOND_FILE",
      "value":
         {"default":"",
          "order":7,
          "required":false,
          "validator":"",
          "visible":true},
-     "semantics": {"ontology":["xsd:string"]},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "maxCardinality":-1,
+         "fileTypes":["raw-0"]},
      "details":
         {"description":"Specify a DIAMOND database with which to search/classify the reads.",
          "label":"Search DIAMOND file",
          "argument":"--search_diamond_file ",
          "showArgument":true}
     },
-    {"id":"ALN_HMM_FILE",
+    {"id": "ALN_HMM_FILE",
      "value":
         {"default":"",
          "order":8,
          "required":false,
          "validator":"",
          "visible":true},
-     "semantics": {"ontology":["xsd:string"]},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "maxCardinality":-1,
+         "fileTypes":["raw-0"]},
      "details":
         {"description":"Reads will be aligned to this HMM after identification. N.B. This option can only be used if no placement is required.",
          "label":"Align HMM file",
          "argument":"--aln_hmm_file ",
          "showArgument":true}
     },
-    {"id":"EUK_HMM_FILE",
+    {"id": "EUK_HMM_FILE",
      "value":
         {"default":"",
          "order":9,
          "required":false,
          "validator":"",
          "visible":true},
-     "semantics": {"ontology":["xsd:string"]},
+     "semantics":
+        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
+         "maxCardinality":-1,
+         "fileTypes":["raw-0"]},
      "details":
         {"description":"The HMM that is used in the Eukaryotic contamination screen",
          "label":"Euk HMM file",
-         "argument":"--aln_hmm_file ",
+         "argument":"--euk_hmm_file ",
          "showArgument":true}
     }
   ],
   "parameters": [
+    {
+      "id": "PREBUILT_GRAFTM_PACKAGE",
+      "value": {
+          "type": "enumeration",
+          "default": "",
+          "order": 0,
+          "required": false,
+          "enumValues": [
+            {"": "none"},
+            {"4.01.2013_08_greengenes_61_otus": "4.01.2013_08_greengenes_61_otus"},
+            {"4.02.2013_08_greengenes_88_otus": "4.02.2013_08_greengenes_88_otus"},
+            {"4.03.2013_08_greengenes_91_otus": "4.03.2013_08_greengenes_91_otus"},
+            {"4.04.2013_08_greengenes_94_otus": "4.04.2013_08_greengenes_94_otus"},
+            {"4.05.2013_08_greengenes_97_otus": "4.05.2013_08_greengenes_97_otus"},
+            {"4.07.ribosomal_protein_L2_rplB": "4.07.ribosomal_protein_L2_rplB"},
+            {"4.08.ribosomal_protein_L3_rplC": "4.08.ribosomal_protein_L3_rplC"},
+            {"4.09.ribosomal_protein_L5_rplE": "4.09.ribosomal_protein_L5_rplE"},
+            {"4.10.ribosomal_protein_L6_rplF": "4.10.ribosomal_protein_L6_rplF"},
+            {"4.11.ribosomal_protein_L10": "4.11.ribosomal_protein_L10"},
+            {"4.12.ribosomal_protein_L11_rplK": "4.12.ribosomal_protein_L11_rplK"},
+            {"4.13.ribosomal_protein_L14b_L23e_rplN": "4.13.ribosomal_protein_L14b_L23e_rplN"},
+            {"4.14.ribosomal_protein_L16_L10E_rplP": "4.14.ribosomal_protein_L16_L10E_rplP"},
+            {"4.15.ribosomal_protein_S2_rpsB": "4.15.ribosomal_protein_S2_rpsB"},
+            {"4.16.ribosomal_protein_S5": "4.16.ribosomal_protein_S5"},
+            {"4.17.ribosomal_protein_S7": "4.17.ribosomal_protein_S7"},
+            {"4.18.ribosomal_protein_S10_rpsJ": "4.18.ribosomal_protein_S10_rpsJ"},
+            {"4.19.ribosomal_protein_S12_S23": "4.19.ribosomal_protein_S12_S23"},
+            {"4.20.ribosomal_protein_S15P_S13e": "4.20.ribosomal_protein_S15P_S13e"},
+            {"4.21.ribosomal_protein_S19_rpsS": "4.21.ribosomal_protein_S19_rpsS"},
+            {"4.27.methyl_coenzyme_reductase_alpha_subunit.mcrA": "4.27.methyl_coenzyme_reductase_alpha_subunit.mcrA"},
+            {"4.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA": "4.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA"},
+            {"4.32.5_10-methylenetetrahydromethanopterin_reductase.mer": "4.32.5_10-methylenetetrahydromethanopterin_reductase.mer"},
+            {"4.39.2013_08_greengenes_97_otus.better_tree": "4.39.2013_08_greengenes_97_otus.better_tree"},
+            {"4.40.2013_08_greengenes_97_otus.with_euks": "4.40.2013_08_greengenes_97_otus.with_euks"},
+            {"4.41.dmso_superfamily": "4.41.dmso_superfamily"},
+            {"7.07.ribosomal_protein_L2_rplB": "7.07.ribosomal_protein_L2_rplB"},
+            {"7.08.ribosomal_protein_L3_rplC": "7.08.ribosomal_protein_L3_rplC"},
+            {"7.09.ribosomal_protein_L5_rplE": "7.09.ribosomal_protein_L5_rplE"},
+            {"7.10.ribosomal_protein_L6_rplF": "7.10.ribosomal_protein_L6_rplF"},
+            {"7.11.ribosomal_protein_L10": "7.11.ribosomal_protein_L10"},
+            {"7.12.ribosomal_protein_L11_rplK": "7.12.ribosomal_protein_L11_rplK"},
+            {"7.13.ribosomal_protein_L14b_L23e_rplN": "7.13.ribosomal_protein_L14b_L23e_rplN"},
+            {"7.14.ribosomal_protein_L16_L10E_rplP": "7.14.ribosomal_protein_L16_L10E_rplP"},
+            {"7.15.ribosomal_protein_S2_rpsB": "7.15.ribosomal_protein_S2_rpsB"},
+            {"7.16.ribosomal_protein_S5": "7.16.ribosomal_protein_S5"},
+            {"7.17.ribosomal_protein_S7": "7.17.ribosomal_protein_S7"},
+            {"7.18.ribosomal_protein_S10_rpsJ": "7.18.ribosomal_protein_S10_rpsJ"},
+            {"7.19.ribosomal_protein_S12_S23": "7.19.ribosomal_protein_S12_S23"},
+            {"7.20.ribosomal_protein_S15P_S13e": "7.20.ribosomal_protein_S15P_S13e"},
+            {"7.21.ribosomal_protein_S19_rpsS": "7.21.ribosomal_protein_S19_rpsS"},
+            {"7.23.recombination_protein_recA": "7.23.recombination_protein_recA"},
+            {"7.24.NiFe_hydrogenase": "7.24.NiFe_hydrogenase"},
+            {"7.25.Fe_hydrogenase": "7.25.Fe_hydrogenase"},
+            {"7.26.FeFe_hydrogenase": "7.26.FeFe_hydrogenase"},
+            {"7.27.methyl_coenzyme_reductase_alpha_subunit.mcrA": "7.27.methyl_coenzyme_reductase_alpha_subunit.mcrA"},
+            {"7.28.adenylylsulfate_reductase_subunit_A.aprA": "7.28.adenylylsulfate_reductase_subunit_A.aprA"},
+            {"7.29.adenylylsulfate_reductase_subunit_B.aprB": "7.29.adenylylsulfate_reductase_subunit_B.aprB"},
+            {"7.30.sulfate_adenylyltransferase.sat": "7.30.sulfate_adenylyltransferase.sat"},
+            {"7.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA": "7.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA"},
+            {"7.32.5_10-methylenetetrahydromethanopterin_reductase.mer": "7.32.5_10-methylenetetrahydromethanopterin_reductase.mer"},
+            {"7.33.recombination_protein.recA_radA": "7.33.recombination_protein.recA_radA"},
+            {"7.34.tusE_dsrC": "7.34.tusE_dsrC"},
+            {"7.35.mxaF_xoxF_adh": "7.35.mxaF_xoxF_adh"},
+            {"7.36.rubisko.rlp": "7.36.rubisko.rlp"},
+            {"7.37.nifH": "7.37.nifH"},
+            {"7.38.nitrate_reductase.narG": "7.38.nitrate_reductase.narG"},
+            {"7.39.2013_08_greengenes_97_otus.better_tree": "7.39.2013_08_greengenes_97_otus.better_tree"},
+            {"7.40.2013_08_greengenes_97_otus.with_euks": "7.40.2013_08_greengenes_97_otus.with_euks"},
+            {"7.41.dmso_superfamily": "7.41.dmso_superfamily"},
+            {"7.42.hydroxylamine.hao_hzo": "7.42.hydroxylamine.hao_hzo"},
+            {"7.43.glutamate_dehydrogenase.gdh": "7.43.glutamate_dehydrogenase.gdh"},
+            {"7.44.Nitrate_reductase.narG_napA": "7.44.Nitrate_reductase.narG_napA"},
+            {"7.45.4Hydroxybutyryl-CoA_dehydratase": "7.45.4Hydroxybutyryl-CoA_dehydratase"},
+            {"7.45.Nitrous_oxide_reductase.nosZ": "7.45.Nitrous_oxide_reductase.nosZ"},
+            {"7.46.ATPCitrateLyase_aclA_rTCA": "7.46.ATPCitrateLyase_aclA_rTCA"},
+            {"7.47.acetylCoA-synthaseB_acsB": "7.47.acetylCoA-synthaseB_acsB"},
+            {"7.48.acetyl-propionyl-CoA_carboxylase_accC": "7.48.acetyl-propionyl-CoA_carboxylase_accC"},
+            {"7.49.nitrite_reductase.nirK": "7.49.nitrite_reductase.nirK"},
+            {"7.50.Glycerol_dehydrogenase": "7.50.Glycerol_dehydrogenase"},
+            {"7.51.13Propanediol_dehydrogenase": "7.51.13Propanediol_dehydrogenase"},
+            {"7.52.Butanol_dehydrogenase.NADH": "7.52.Butanol_dehydrogenase.NADH"},
+            {"7.53.Butyrate_kinase": "7.53.Butyrate_kinase"},
+            {"7.54.AcetateCoA_Transferase.YdiF": "7.54.AcetateCoA_Transferase.YdiF"},
+            {"7.55.MethylmalonylCoA_decarboxylase": "7.55.MethylmalonylCoA_decarboxylase"},
+            {"7.56.cd00368_Molybdopterin-Binding": "7.56.cd00368_Molybdopterin-Binding"},
+            {"7.58.pilin_A": "7.58.pilin_A"}
+          ],
+          "visible": true
+      },
+      "details": {
+          "description": "",
+          "label": "Prebuilt Package",
+          "argument": "-p ",
+          "showArgument": true
+      }
+    },
     {
       "id": "INPUT_SEQUENCE_TYPE",
       "value": {
@@ -319,7 +435,7 @@
       "details": {
           "description": "Taxonomic assignment method, either pplacer (phylogenetic) or DIAMOND (pairwise).",
           "label": "Taxonomic assignment method",
-          "argument": "--assigment_method ",
+          "argument": "--assignment_method ",
           "showArgument": true
       }
     },
@@ -427,7 +543,7 @@
       "details": {
           "description": "",
           "label": "Search method",
-          "argument": "--search_method ",
+          "argument": "--verbosity ",
           "showArgument": true
       }
     },
