@@ -1,569 +1,887 @@
-{"available":true,
- "checkpointable":false,
- "defaultMemoryPerNode":32,
- "defaultProcessorsPerNode":16,
- "defaultMaxRunTime":"12:00:00",
- "defaultNodeCount":1,
- "defaultQueue":"normal",
- "deploymentPath":"kyclark/applications/graftm-0.11.1/stampede2",
- "deploymentSystem":"data.iplantcollaborative.org",
- "executionSystem":"tacc-stampede2-kyclark",
- "executionType":"HPC",
- "helpURI":"https://github.com/geronimp/graftM",
- "label": "graftM",
- "longDescription":"Rapid community profiles from metagenomes",
- "modules":["load tacc-singularity"],
- "name":"graftm",
- "ontology":["http://sswapmeet.sswap.info/agave/apps/Application"],
- "parallelism":"SERIAL",
- "shortDescription":"Rapid community profiles from metagenomes",
- "tags":["graftm", "metagenome"],
- "templatePath":"template.sh",
- "testPath":"test.sh",
- "version":"0.11.1",
- "inputs":[
-    {"id": "FORWARD",
-     "value":
-        {"default":"",
-         "order":1,
-         "required":true,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "minCardinality":1,
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"List/directory of FASTA|Q(.gz) files to compare",
-         "label":"Single/forward reads",
-         "argument":"-f ",
-         "repeatArgument":true,
-         "showArgument":true}
-    },
-    {"id": "REVERSE",
-     "value":
-        {"default":"",
-         "order":2,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"List/directory of FASTA|Q(.gz) files to compare",
-         "label":"Reverse reads",
-         "argument":"-r ",
-         "repeatArgument":true,
-         "showArgument":true}
-    },
-    {"id": "GRAFTM_PACKAGE",
-     "value":
-        {"default":"",
-         "order":3,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "maxCardinality":1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"The path to the GraftM package containing the HMM, reference package, etc.",
-         "label":"GraftM Package",
-         "argument":"--graftm_package ",
-         "showArgument":true}
-    },
-    {"id": "DECOY_DATABASE",
-     "value":
-        {"default":"",
-         "order":4,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"Path to a diamond database. Sequences with better hits to these proteins will be excluded.",
-         "label":"Decoy database",
-         "argument":"--decoy_database ",
-         "showArgument":true}
-    },
-    {"id": "EXPAND_SEARCH_CONTIGS",
-     "value":
-        {"default":"",
-         "order":5,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"Provide an assembly of the sample being searched. This assembly will initially be searched for full length genes, from which a sample specific HMM model will be created and used in the search step of graftM.",
-         "label":"Expand search contigs",
-         "argument":"--expand_search_contigs ",
-         "showArgument":true}
-    },
-    {"id": "SEARCH_HMM_FILES",
-     "value":
-        {"default":"",
-         "order":6,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"Specify a list of paths to custom HMM(s) to search the data with.",
-         "label":"Search HMM files",
-         "argument":"--search_hmm_files ",
-         "showArgument":true}
-    },
-    {"id": "SEARCH_DIAMOND_FILE",
-     "value":
-        {"default":"",
-         "order":7,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"Specify a DIAMOND database with which to search/classify the reads.",
-         "label":"Search DIAMOND file",
-         "argument":"--search_diamond_file ",
-         "showArgument":true}
-    },
-    {"id": "ALN_HMM_FILE",
-     "value":
-        {"default":"",
-         "order":8,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"Reads will be aligned to this HMM after identification. N.B. This option can only be used if no placement is required.",
-         "label":"Align HMM file",
-         "argument":"--aln_hmm_file ",
-         "showArgument":true}
-    },
-    {"id": "EUK_HMM_FILE",
-     "value":
-        {"default":"",
-         "order":9,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"The HMM that is used in the Eukaryotic contamination screen",
-         "label":"Euk HMM file",
-         "argument":"--euk_hmm_file ",
-         "showArgument":true}
-    }
-  ],
-  "parameters": [
-    {
-      "id": "PREBUILT_GRAFTM_PACKAGE",
-      "value": {
-          "type": "enumeration",
-          "default": "",
-          "order": 0,
-          "required": false,
-          "enumValues": [
-            {"": "none"},
-            {"4.01.2013_08_greengenes_61_otus": "4.01.2013_08_greengenes_61_otus"},
-            {"4.02.2013_08_greengenes_88_otus": "4.02.2013_08_greengenes_88_otus"},
-            {"4.03.2013_08_greengenes_91_otus": "4.03.2013_08_greengenes_91_otus"},
-            {"4.04.2013_08_greengenes_94_otus": "4.04.2013_08_greengenes_94_otus"},
-            {"4.05.2013_08_greengenes_97_otus": "4.05.2013_08_greengenes_97_otus"},
-            {"4.07.ribosomal_protein_L2_rplB": "4.07.ribosomal_protein_L2_rplB"},
-            {"4.08.ribosomal_protein_L3_rplC": "4.08.ribosomal_protein_L3_rplC"},
-            {"4.09.ribosomal_protein_L5_rplE": "4.09.ribosomal_protein_L5_rplE"},
-            {"4.10.ribosomal_protein_L6_rplF": "4.10.ribosomal_protein_L6_rplF"},
-            {"4.11.ribosomal_protein_L10": "4.11.ribosomal_protein_L10"},
-            {"4.12.ribosomal_protein_L11_rplK": "4.12.ribosomal_protein_L11_rplK"},
-            {"4.13.ribosomal_protein_L14b_L23e_rplN": "4.13.ribosomal_protein_L14b_L23e_rplN"},
-            {"4.14.ribosomal_protein_L16_L10E_rplP": "4.14.ribosomal_protein_L16_L10E_rplP"},
-            {"4.15.ribosomal_protein_S2_rpsB": "4.15.ribosomal_protein_S2_rpsB"},
-            {"4.16.ribosomal_protein_S5": "4.16.ribosomal_protein_S5"},
-            {"4.17.ribosomal_protein_S7": "4.17.ribosomal_protein_S7"},
-            {"4.18.ribosomal_protein_S10_rpsJ": "4.18.ribosomal_protein_S10_rpsJ"},
-            {"4.19.ribosomal_protein_S12_S23": "4.19.ribosomal_protein_S12_S23"},
-            {"4.20.ribosomal_protein_S15P_S13e": "4.20.ribosomal_protein_S15P_S13e"},
-            {"4.21.ribosomal_protein_S19_rpsS": "4.21.ribosomal_protein_S19_rpsS"},
-            {"4.27.methyl_coenzyme_reductase_alpha_subunit.mcrA": "4.27.methyl_coenzyme_reductase_alpha_subunit.mcrA"},
-            {"4.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA": "4.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA"},
-            {"4.32.5_10-methylenetetrahydromethanopterin_reductase.mer": "4.32.5_10-methylenetetrahydromethanopterin_reductase.mer"},
-            {"4.39.2013_08_greengenes_97_otus.better_tree": "4.39.2013_08_greengenes_97_otus.better_tree"},
-            {"4.40.2013_08_greengenes_97_otus.with_euks": "4.40.2013_08_greengenes_97_otus.with_euks"},
-            {"4.41.dmso_superfamily": "4.41.dmso_superfamily"},
-            {"7.07.ribosomal_protein_L2_rplB": "7.07.ribosomal_protein_L2_rplB"},
-            {"7.08.ribosomal_protein_L3_rplC": "7.08.ribosomal_protein_L3_rplC"},
-            {"7.09.ribosomal_protein_L5_rplE": "7.09.ribosomal_protein_L5_rplE"},
-            {"7.10.ribosomal_protein_L6_rplF": "7.10.ribosomal_protein_L6_rplF"},
-            {"7.11.ribosomal_protein_L10": "7.11.ribosomal_protein_L10"},
-            {"7.12.ribosomal_protein_L11_rplK": "7.12.ribosomal_protein_L11_rplK"},
-            {"7.13.ribosomal_protein_L14b_L23e_rplN": "7.13.ribosomal_protein_L14b_L23e_rplN"},
-            {"7.14.ribosomal_protein_L16_L10E_rplP": "7.14.ribosomal_protein_L16_L10E_rplP"},
-            {"7.15.ribosomal_protein_S2_rpsB": "7.15.ribosomal_protein_S2_rpsB"},
-            {"7.16.ribosomal_protein_S5": "7.16.ribosomal_protein_S5"},
-            {"7.17.ribosomal_protein_S7": "7.17.ribosomal_protein_S7"},
-            {"7.18.ribosomal_protein_S10_rpsJ": "7.18.ribosomal_protein_S10_rpsJ"},
-            {"7.19.ribosomal_protein_S12_S23": "7.19.ribosomal_protein_S12_S23"},
-            {"7.20.ribosomal_protein_S15P_S13e": "7.20.ribosomal_protein_S15P_S13e"},
-            {"7.21.ribosomal_protein_S19_rpsS": "7.21.ribosomal_protein_S19_rpsS"},
-            {"7.23.recombination_protein_recA": "7.23.recombination_protein_recA"},
-            {"7.24.NiFe_hydrogenase": "7.24.NiFe_hydrogenase"},
-            {"7.25.Fe_hydrogenase": "7.25.Fe_hydrogenase"},
-            {"7.26.FeFe_hydrogenase": "7.26.FeFe_hydrogenase"},
-            {"7.27.methyl_coenzyme_reductase_alpha_subunit.mcrA": "7.27.methyl_coenzyme_reductase_alpha_subunit.mcrA"},
-            {"7.28.adenylylsulfate_reductase_subunit_A.aprA": "7.28.adenylylsulfate_reductase_subunit_A.aprA"},
-            {"7.29.adenylylsulfate_reductase_subunit_B.aprB": "7.29.adenylylsulfate_reductase_subunit_B.aprB"},
-            {"7.30.sulfate_adenylyltransferase.sat": "7.30.sulfate_adenylyltransferase.sat"},
-            {"7.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA": "7.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA"},
-            {"7.32.5_10-methylenetetrahydromethanopterin_reductase.mer": "7.32.5_10-methylenetetrahydromethanopterin_reductase.mer"},
-            {"7.33.recombination_protein.recA_radA": "7.33.recombination_protein.recA_radA"},
-            {"7.34.tusE_dsrC": "7.34.tusE_dsrC"},
-            {"7.35.mxaF_xoxF_adh": "7.35.mxaF_xoxF_adh"},
-            {"7.36.rubisko.rlp": "7.36.rubisko.rlp"},
-            {"7.37.nifH": "7.37.nifH"},
-            {"7.38.nitrate_reductase.narG": "7.38.nitrate_reductase.narG"},
-            {"7.39.2013_08_greengenes_97_otus.better_tree": "7.39.2013_08_greengenes_97_otus.better_tree"},
-            {"7.40.2013_08_greengenes_97_otus.with_euks": "7.40.2013_08_greengenes_97_otus.with_euks"},
-            {"7.41.dmso_superfamily": "7.41.dmso_superfamily"},
-            {"7.42.hydroxylamine.hao_hzo": "7.42.hydroxylamine.hao_hzo"},
-            {"7.43.glutamate_dehydrogenase.gdh": "7.43.glutamate_dehydrogenase.gdh"},
-            {"7.44.Nitrate_reductase.narG_napA": "7.44.Nitrate_reductase.narG_napA"},
-            {"7.45.4Hydroxybutyryl-CoA_dehydratase": "7.45.4Hydroxybutyryl-CoA_dehydratase"},
-            {"7.45.Nitrous_oxide_reductase.nosZ": "7.45.Nitrous_oxide_reductase.nosZ"},
-            {"7.46.ATPCitrateLyase_aclA_rTCA": "7.46.ATPCitrateLyase_aclA_rTCA"},
-            {"7.47.acetylCoA-synthaseB_acsB": "7.47.acetylCoA-synthaseB_acsB"},
-            {"7.48.acetyl-propionyl-CoA_carboxylase_accC": "7.48.acetyl-propionyl-CoA_carboxylase_accC"},
-            {"7.49.nitrite_reductase.nirK": "7.49.nitrite_reductase.nirK"},
-            {"7.50.Glycerol_dehydrogenase": "7.50.Glycerol_dehydrogenase"},
-            {"7.51.13Propanediol_dehydrogenase": "7.51.13Propanediol_dehydrogenase"},
-            {"7.52.Butanol_dehydrogenase.NADH": "7.52.Butanol_dehydrogenase.NADH"},
-            {"7.53.Butyrate_kinase": "7.53.Butyrate_kinase"},
-            {"7.54.AcetateCoA_Transferase.YdiF": "7.54.AcetateCoA_Transferase.YdiF"},
-            {"7.55.MethylmalonylCoA_decarboxylase": "7.55.MethylmalonylCoA_decarboxylase"},
-            {"7.56.cd00368_Molybdopterin-Binding": "7.56.cd00368_Molybdopterin-Binding"},
-            {"7.58.pilin_A": "7.58.pilin_A"}
-          ],
-          "visible": true
-      },
-      "details": {
-          "description": "",
-          "label": "Prebuilt Package",
-          "argument": "-p ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "INPUT_SEQUENCE_TYPE",
-      "value": {
-          "type": "enumeration",
-          "default": "nucleotide",
-          "order": 1,
-          "required": false,
-          "enumValues": [
-            { "nucleotide": "nucleotide" },
-            { "aminoacid" : "aminoacid" }
-          ],
-          "visible": true
-      },
-      "details": {
-          "description": "Specify whether the input sequence is 'nucleotide' or 'aminoacid' sequence data",
-          "label": "Input sequence type",
-          "argument": "--input_sequence_type ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "FILTER_MINIMUM",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 2,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Minimum number of positions that must be aligned for a sequence to be placed in the phylogenetic tree (default: 95bp for nucleotide packages, 30 aa for protein packages)",
-          "label": "Filter minimum",
-          "argument": "--filter_minimum ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "EVALUE",
-      "value": {
-          "type": "string",
-          "default": "1e-5",
-          "order": 3,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Specify the evalue cutoff for the hmmsearch, if you would like to use a cutoff different to the default or the trusted cutoff (TC) within the HMM.",
-          "label": "E-value",
-          "argument": "--evalue ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "SEARCH_AND_ALIGN_ONLY",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 4,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Stop GraftM running after reads have been identified and aligned (i.e. no placement step)",
-          "label": "Search and align only",
-          "argument": "--search_and_align_only ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "SEARCH_ONLY",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 5,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Stop GraftM running after reads have been identified (i.e. no alignment or placement steps)",
-          "label": "Search only",
-          "argument": "--search_only ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "EUK_CHECK",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 6,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Cross check identified reads using an 18S specific HMM to help filter out eukaryotic ribosomal reads",
-          "label": "Euk check",
-          "argument": "--euk_check ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "SEARCH_METHOD",
-      "value": {
-          "type": "enumeration",
-          "default": "hmmsearch",
-          "order": 7,
-          "required": false,
-          "enumValues": [
-            { "hmmsearch": "hmmsearch" },
-            { "hmmsearch": "hmmsearch" },
-            { "hmmsearch+diamond" : "hmmsearch+diamond" }
-          ],
-          "visible": true
-      },
-      "details": {
-          "description": "",
-          "label": "Search method",
-          "argument": "--search_method ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "MAXIMUM_RANGE",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 8,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Maximum range to use when searching for potentially linked reads (when searching contigs)",
-          "label": "Maxium range",
-          "argument": "--maximum_range ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "ASSIGNMENT_METHOD",
-      "value": {
-          "type": "enumeration",
-          "default": "pplacer",
-          "order": 9,
-          "required": false,
-          "enumValues": [
-            { "pplacer": "pplacer" },
-            { "diamond" : "diamond" }
-          ],
-          "visible": true
-      },
-      "details": {
-          "description": "Taxonomic assignment method, either pplacer (phylogenetic) or DIAMOND (pairwise).",
-          "label": "Taxonomic assignment method",
-          "argument": "--assignment_method ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "PLACEMENTS_CUTOFF",
-      "value": {
-          "type": "string",
-          "default": "0.75",
-          "order": 10,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "This flag allows you to change the likelihood cutoff for phylogenetic placement of reads.",
-          "label": "Placements cuttoff",
-          "argument": "--placements_cutoff ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "RESOLVE_PLACEMENTS",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 11,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Ignore the placements cutoff and simply use the best placement assigned to the read.",
-          "label": "Resolve placements",
-          "argument": "--resolve_placements ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "NO_MERGE_READS",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 12,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "When this flag is specified, the alignment of the forward and reverse reads will not be merged before placement. If paired reads are provided, pair with the most confident placement will be used for classification.",
-          "label": "No merge reads",
-          "argument": "--no_merge_reads ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "MIN_ORF_LENGTH",
-      "value": {
-          "type": "string",
-          "default": "96",
-          "order": 13,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Minimum number of nucleotides in an open reading frame",
-          "label": "Min ORF length",
-          "argument": "--min_orf_length ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "RESTRICT_READ_LENGTH",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 14,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Only use this many base pairs at the start of each sequence searched",
-          "label": "Restrict read length",
-          "argument": "--restrict_read_length ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "VERBOSITY",
-      "value": {
-          "type": "enumeration",
-          "default": "4",
-          "order": 15,
-          "required": false,
-          "enumValues": [
-            { "1": "1 (silent)" },
-            { "2": "2" },
-            { "3" : "3" },
-            { "4" : "4 (default)" },
-            { "5" : "5 (noise)" }
-          ],
-          "visible": true
-      },
-      "details": {
-          "description": "",
-          "label": "Search method",
-          "argument": "--verbosity ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "MAX_SAMPLES_FOR_KRONA",
-      "value": {
-          "type": "string",
-          "default": "100",
-          "order": 16,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "If the number of samples is greater than this, do not output KRONA diagram",
-          "label": "Max samples for Krona",
-          "argument": "--max_samples_for_krona ",
-          "showArgument": true
-      }
-    }
-  ],
-  "outputs":[]
+{
+    "name": "graftm",
+    "version": "0.11.1",
+    "shortDescription": "Rapid community profiles from metagenomes",
+    "longDescription": "Large-scale metagenomic datasets enable the recovery of hundreds of population genomes from environmental samples. However, these genomes do not typically represent the full diversity of complex microbial communities. Gene-centric approaches can be used to gain a comprehensive view of diversity by examining each read independently, but traditional pairwise comparison approaches typically over-classify taxonomy and scale poorly with increasing metagenome and database sizes. Here we introduce GraftM, a tool that uses gene specific packages to rapidly identify gene families in metagenomic data using hidden Markov models (HMMs) or DIAMOND databases, and classifies these sequences using placement into pre-constructed gene trees. The speed and accuracy of GraftM was benchmarked with in silico and in vitro mock communities using taxonomic markers, and was found to have higher accuracy at the family level with a processing time 2.0–3.7× faster than currently available software. Exploration of a wetland metagenome using 16S rRNA- and methyl-coenzyme M reductase (McrA)-specific gpkgs revealed taxonomic and functional shifts across a depth gradient. Analysis of the NCBI nr database using the McrA gpkg allowed the detection of novel sequences belonging to phylum-level lineages. A growing collection of gpkgs is available online (https://github.com/geronimp/graftM_gpkgs), where curated packages can be uploaded and exchanged.",
+    "available": true,
+    "checkpointable": false,
+    "defaultMemoryPerNode": 32,
+    "defaultProcessorsPerNode": 16,
+    "defaultMaxRunTime": "12:00:00",
+    "defaultNodeCount": 1,
+    "defaultQueue": "normal",
+    "deploymentPath": "kyclark/applications/graftm-0.11.1/stampede2",
+    "deploymentSystem": "data.iplantcollaborative.org",
+    "executionSystem": "tacc-stampede2-kyclark",
+    "executionType": "HPC",
+    "helpURI": "https://github.com/geronimp/graftM",
+    "label": "graftM",
+    "parallelism": "SERIAL",
+    "templatePath": "template.sh",
+    "testPath": "test.sh",
+    "modules": [
+        "load tacc-singularity"
+    ],
+    "tags": [
+        "graftm",
+        "metagenome"
+    ],
+    "ontology": [
+        "http://sswapmeet.sswap.info/agave/apps/Application"
+    ],
+    "inputs": [
+        {
+            "id": "FORWARD",
+            "value": {
+                "default": "",
+                "order": 1,
+                "validator": "",
+                "required": true,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "List/directory of FASTA|Q(.gz) files to compare",
+                "label": "Single/forward reads",
+                "argument": "-f ",
+                "repeatArgument": true,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "REVERSE",
+            "value": {
+                "default": "",
+                "order": 2,
+                "validator": "",
+                "required": false,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "List/directory of FASTA|Q(.gz) files to compare",
+                "label": "Reverse reads",
+                "argument": "-r ",
+                "repeatArgument": true,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "GRAFTM_PACKAGE",
+            "value": {
+                "default": "",
+                "order": 3,
+                "validator": "",
+                "required": false,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": 1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "The path to the GraftM package containing the HMM, reference package, etc.",
+                "label": "GraftM Package",
+                "argument": "--graftm_package ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "DECOY_DATABASE",
+            "value": {
+                "default": "",
+                "order": 4,
+                "validator": "",
+                "required": false,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "Path to a diamond database. Sequences with better hits to these proteins will be excluded.",
+                "label": "Decoy database",
+                "argument": "--decoy_database ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "EXPAND_SEARCH_CONTIGS",
+            "value": {
+                "default": "",
+                "order": 5,
+                "validator": "",
+                "required": false,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "Provide an assembly of the sample being searched. This assembly will initially be searched for full length genes, from which a sample specific HMM model will be created and used in the search step of graftM.",
+                "label": "Expand search contigs",
+                "argument": "--expand_search_contigs ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "SEARCH_HMM_FILES",
+            "value": {
+                "default": "",
+                "order": 6,
+                "validator": "",
+                "required": false,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "Specify a list of paths to custom HMM(s) to search the data with.",
+                "label": "Search HMM files",
+                "argument": "--search_hmm_files ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "SEARCH_DIAMOND_FILE",
+            "value": {
+                "default": "",
+                "order": 7,
+                "validator": "",
+                "required": false,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "Specify a DIAMOND database with which to search/classify the reads.",
+                "label": "Search DIAMOND file",
+                "argument": "--search_diamond_file ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "ALN_HMM_FILE",
+            "value": {
+                "default": "",
+                "order": 8,
+                "validator": "",
+                "required": false,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "Reads will be aligned to this HMM after identification. N.B. This option can only be used if no placement is required.",
+                "label": "Align HMM file",
+                "argument": "--aln_hmm_file ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "EUK_HMM_FILE",
+            "value": {
+                "default": "",
+                "order": 9,
+                "validator": "",
+                "required": false,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "The HMM that is used in the Eukaryotic contamination screen",
+                "label": "Euk HMM file",
+                "argument": "--euk_hmm_file ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        }
+    ],
+    "parameters": [
+        {
+            "id": "PREBUILT_GRAFTM_PACKAGE",
+            "value": {
+                "default": "",
+                "type": "enumeration",
+                "order": 0,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "enumValues": [
+                    {
+                        "": "none"
+                    },
+                    {
+                        "4.01.2013_08_greengenes_61_otus": "4.01.2013_08_greengenes_61_otus"
+                    },
+                    {
+                        "4.02.2013_08_greengenes_88_otus": "4.02.2013_08_greengenes_88_otus"
+                    },
+                    {
+                        "4.03.2013_08_greengenes_91_otus": "4.03.2013_08_greengenes_91_otus"
+                    },
+                    {
+                        "4.04.2013_08_greengenes_94_otus": "4.04.2013_08_greengenes_94_otus"
+                    },
+                    {
+                        "4.05.2013_08_greengenes_97_otus": "4.05.2013_08_greengenes_97_otus"
+                    },
+                    {
+                        "4.07.ribosomal_protein_L2_rplB": "4.07.ribosomal_protein_L2_rplB"
+                    },
+                    {
+                        "4.08.ribosomal_protein_L3_rplC": "4.08.ribosomal_protein_L3_rplC"
+                    },
+                    {
+                        "4.09.ribosomal_protein_L5_rplE": "4.09.ribosomal_protein_L5_rplE"
+                    },
+                    {
+                        "4.10.ribosomal_protein_L6_rplF": "4.10.ribosomal_protein_L6_rplF"
+                    },
+                    {
+                        "4.11.ribosomal_protein_L10": "4.11.ribosomal_protein_L10"
+                    },
+                    {
+                        "4.12.ribosomal_protein_L11_rplK": "4.12.ribosomal_protein_L11_rplK"
+                    },
+                    {
+                        "4.13.ribosomal_protein_L14b_L23e_rplN": "4.13.ribosomal_protein_L14b_L23e_rplN"
+                    },
+                    {
+                        "4.14.ribosomal_protein_L16_L10E_rplP": "4.14.ribosomal_protein_L16_L10E_rplP"
+                    },
+                    {
+                        "4.15.ribosomal_protein_S2_rpsB": "4.15.ribosomal_protein_S2_rpsB"
+                    },
+                    {
+                        "4.16.ribosomal_protein_S5": "4.16.ribosomal_protein_S5"
+                    },
+                    {
+                        "4.17.ribosomal_protein_S7": "4.17.ribosomal_protein_S7"
+                    },
+                    {
+                        "4.18.ribosomal_protein_S10_rpsJ": "4.18.ribosomal_protein_S10_rpsJ"
+                    },
+                    {
+                        "4.19.ribosomal_protein_S12_S23": "4.19.ribosomal_protein_S12_S23"
+                    },
+                    {
+                        "4.20.ribosomal_protein_S15P_S13e": "4.20.ribosomal_protein_S15P_S13e"
+                    },
+                    {
+                        "4.21.ribosomal_protein_S19_rpsS": "4.21.ribosomal_protein_S19_rpsS"
+                    },
+                    {
+                        "4.27.methyl_coenzyme_reductase_alpha_subunit.mcrA": "4.27.methyl_coenzyme_reductase_alpha_subunit.mcrA"
+                    },
+                    {
+                        "4.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA": "4.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA"
+                    },
+                    {
+                        "4.32.5_10-methylenetetrahydromethanopterin_reductase.mer": "4.32.5_10-methylenetetrahydromethanopterin_reductase.mer"
+                    },
+                    {
+                        "4.39.2013_08_greengenes_97_otus.better_tree": "4.39.2013_08_greengenes_97_otus.better_tree"
+                    },
+                    {
+                        "4.40.2013_08_greengenes_97_otus.with_euks": "4.40.2013_08_greengenes_97_otus.with_euks"
+                    },
+                    {
+                        "4.41.dmso_superfamily": "4.41.dmso_superfamily"
+                    },
+                    {
+                        "7.07.ribosomal_protein_L2_rplB": "7.07.ribosomal_protein_L2_rplB"
+                    },
+                    {
+                        "7.08.ribosomal_protein_L3_rplC": "7.08.ribosomal_protein_L3_rplC"
+                    },
+                    {
+                        "7.09.ribosomal_protein_L5_rplE": "7.09.ribosomal_protein_L5_rplE"
+                    },
+                    {
+                        "7.10.ribosomal_protein_L6_rplF": "7.10.ribosomal_protein_L6_rplF"
+                    },
+                    {
+                        "7.11.ribosomal_protein_L10": "7.11.ribosomal_protein_L10"
+                    },
+                    {
+                        "7.12.ribosomal_protein_L11_rplK": "7.12.ribosomal_protein_L11_rplK"
+                    },
+                    {
+                        "7.13.ribosomal_protein_L14b_L23e_rplN": "7.13.ribosomal_protein_L14b_L23e_rplN"
+                    },
+                    {
+                        "7.14.ribosomal_protein_L16_L10E_rplP": "7.14.ribosomal_protein_L16_L10E_rplP"
+                    },
+                    {
+                        "7.15.ribosomal_protein_S2_rpsB": "7.15.ribosomal_protein_S2_rpsB"
+                    },
+                    {
+                        "7.16.ribosomal_protein_S5": "7.16.ribosomal_protein_S5"
+                    },
+                    {
+                        "7.17.ribosomal_protein_S7": "7.17.ribosomal_protein_S7"
+                    },
+                    {
+                        "7.18.ribosomal_protein_S10_rpsJ": "7.18.ribosomal_protein_S10_rpsJ"
+                    },
+                    {
+                        "7.19.ribosomal_protein_S12_S23": "7.19.ribosomal_protein_S12_S23"
+                    },
+                    {
+                        "7.20.ribosomal_protein_S15P_S13e": "7.20.ribosomal_protein_S15P_S13e"
+                    },
+                    {
+                        "7.21.ribosomal_protein_S19_rpsS": "7.21.ribosomal_protein_S19_rpsS"
+                    },
+                    {
+                        "7.23.recombination_protein_recA": "7.23.recombination_protein_recA"
+                    },
+                    {
+                        "7.24.NiFe_hydrogenase": "7.24.NiFe_hydrogenase"
+                    },
+                    {
+                        "7.25.Fe_hydrogenase": "7.25.Fe_hydrogenase"
+                    },
+                    {
+                        "7.26.FeFe_hydrogenase": "7.26.FeFe_hydrogenase"
+                    },
+                    {
+                        "7.27.methyl_coenzyme_reductase_alpha_subunit.mcrA": "7.27.methyl_coenzyme_reductase_alpha_subunit.mcrA"
+                    },
+                    {
+                        "7.28.adenylylsulfate_reductase_subunit_A.aprA": "7.28.adenylylsulfate_reductase_subunit_A.aprA"
+                    },
+                    {
+                        "7.29.adenylylsulfate_reductase_subunit_B.aprB": "7.29.adenylylsulfate_reductase_subunit_B.aprB"
+                    },
+                    {
+                        "7.30.sulfate_adenylyltransferase.sat": "7.30.sulfate_adenylyltransferase.sat"
+                    },
+                    {
+                        "7.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA": "7.31.tetrahydromethanopterin_S-methyltransferase_subunit_A.mtrA"
+                    },
+                    {
+                        "7.32.5_10-methylenetetrahydromethanopterin_reductase.mer": "7.32.5_10-methylenetetrahydromethanopterin_reductase.mer"
+                    },
+                    {
+                        "7.33.recombination_protein.recA_radA": "7.33.recombination_protein.recA_radA"
+                    },
+                    {
+                        "7.34.tusE_dsrC": "7.34.tusE_dsrC"
+                    },
+                    {
+                        "7.35.mxaF_xoxF_adh": "7.35.mxaF_xoxF_adh"
+                    },
+                    {
+                        "7.36.rubisko.rlp": "7.36.rubisko.rlp"
+                    },
+                    {
+                        "7.37.nifH": "7.37.nifH"
+                    },
+                    {
+                        "7.38.nitrate_reductase.narG": "7.38.nitrate_reductase.narG"
+                    },
+                    {
+                        "7.39.2013_08_greengenes_97_otus.better_tree": "7.39.2013_08_greengenes_97_otus.better_tree"
+                    },
+                    {
+                        "7.40.2013_08_greengenes_97_otus.with_euks": "7.40.2013_08_greengenes_97_otus.with_euks"
+                    },
+                    {
+                        "7.41.dmso_superfamily": "7.41.dmso_superfamily"
+                    },
+                    {
+                        "7.42.hydroxylamine.hao_hzo": "7.42.hydroxylamine.hao_hzo"
+                    },
+                    {
+                        "7.43.glutamate_dehydrogenase.gdh": "7.43.glutamate_dehydrogenase.gdh"
+                    },
+                    {
+                        "7.44.Nitrate_reductase.narG_napA": "7.44.Nitrate_reductase.narG_napA"
+                    },
+                    {
+                        "7.45.4Hydroxybutyryl-CoA_dehydratase": "7.45.4Hydroxybutyryl-CoA_dehydratase"
+                    },
+                    {
+                        "7.45.Nitrous_oxide_reductase.nosZ": "7.45.Nitrous_oxide_reductase.nosZ"
+                    },
+                    {
+                        "7.46.ATPCitrateLyase_aclA_rTCA": "7.46.ATPCitrateLyase_aclA_rTCA"
+                    },
+                    {
+                        "7.47.acetylCoA-synthaseB_acsB": "7.47.acetylCoA-synthaseB_acsB"
+                    },
+                    {
+                        "7.48.acetyl-propionyl-CoA_carboxylase_accC": "7.48.acetyl-propionyl-CoA_carboxylase_accC"
+                    },
+                    {
+                        "7.49.nitrite_reductase.nirK": "7.49.nitrite_reductase.nirK"
+                    },
+                    {
+                        "7.50.Glycerol_dehydrogenase": "7.50.Glycerol_dehydrogenase"
+                    },
+                    {
+                        "7.51.13Propanediol_dehydrogenase": "7.51.13Propanediol_dehydrogenase"
+                    },
+                    {
+                        "7.52.Butanol_dehydrogenase.NADH": "7.52.Butanol_dehydrogenase.NADH"
+                    },
+                    {
+                        "7.53.Butyrate_kinase": "7.53.Butyrate_kinase"
+                    },
+                    {
+                        "7.54.AcetateCoA_Transferase.YdiF": "7.54.AcetateCoA_Transferase.YdiF"
+                    },
+                    {
+                        "7.55.MethylmalonylCoA_decarboxylase": "7.55.MethylmalonylCoA_decarboxylase"
+                    },
+                    {
+                        "7.56.cd00368_Molybdopterin-Binding": "7.56.cd00368_Molybdopterin-Binding"
+                    },
+                    {
+                        "7.58.pilin_A": "7.58.pilin_A"
+                    }
+                ]
+            },
+            "details": {
+                "description": "",
+                "label": "Prebuilt Package",
+                "argument": "-p ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "INPUT_SEQUENCE_TYPE",
+            "value": {
+                "default": "nucleotide",
+                "type": "enumeration",
+                "order": 1,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "enumValues": [
+                    {
+                        "nucleotide": "nucleotide"
+                    },
+                    {
+                        "aminoacid": "aminoacid"
+                    }
+                ]
+            },
+            "details": {
+                "description": "Specify whether the input sequence is 'nucleotide' or 'aminoacid' sequence data",
+                "label": "Input sequence type",
+                "argument": "--input_sequence_type ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "FILTER_MINIMUM",
+            "value": {
+                "default": "",
+                "type": "string",
+                "order": 2,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Minimum number of positions that must be aligned for a sequence to be placed in the phylogenetic tree (default: 95bp for nucleotide packages, 30 aa for protein packages)",
+                "label": "Filter minimum",
+                "argument": "--filter_minimum ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "EVALUE",
+            "value": {
+                "default": "1e-5",
+                "type": "string",
+                "order": 3,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Specify the evalue cutoff for the hmmsearch, if you would like to use a cutoff different to the default or the trusted cutoff (TC) within the HMM.",
+                "label": "E-value",
+                "argument": "--evalue ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "SEARCH_AND_ALIGN_ONLY",
+            "value": {
+                "default": false,
+                "type": "flag",
+                "order": 4,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Stop GraftM running after reads have been identified and aligned (i.e. no placement step)",
+                "label": "Search and align only",
+                "argument": "--search_and_align_only ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "SEARCH_ONLY",
+            "value": {
+                "default": false,
+                "type": "flag",
+                "order": 5,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Stop GraftM running after reads have been identified (i.e. no alignment or placement steps)",
+                "label": "Search only",
+                "argument": "--search_only ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "EUK_CHECK",
+            "value": {
+                "default": false,
+                "type": "flag",
+                "order": 6,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Cross check identified reads using an 18S specific HMM to help filter out eukaryotic ribosomal reads",
+                "label": "Euk check",
+                "argument": "--euk_check ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "SEARCH_METHOD",
+            "value": {
+                "default": "hmmsearch",
+                "type": "enumeration",
+                "order": 7,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "enumValues": [
+                    {
+                        "hmmsearch": "hmmsearch"
+                    },
+                    {
+                        "hmmsearch": "hmmsearch"
+                    },
+                    {
+                        "hmmsearch+diamond": "hmmsearch+diamond"
+                    }
+                ]
+            },
+            "details": {
+                "description": "",
+                "label": "Search method",
+                "argument": "--search_method ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "MAXIMUM_RANGE",
+            "value": {
+                "default": "",
+                "type": "string",
+                "order": 8,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Maximum range to use when searching for potentially linked reads (when searching contigs)",
+                "label": "Maxium range",
+                "argument": "--maximum_range ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "ASSIGNMENT_METHOD",
+            "value": {
+                "default": "pplacer",
+                "type": "enumeration",
+                "order": 9,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "enumValues": [
+                    {
+                        "pplacer": "pplacer"
+                    },
+                    {
+                        "diamond": "diamond"
+                    }
+                ]
+            },
+            "details": {
+                "description": "Taxonomic assignment method, either pplacer (phylogenetic) or DIAMOND (pairwise).",
+                "label": "Taxonomic assignment method",
+                "argument": "--assignment_method ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "PLACEMENTS_CUTOFF",
+            "value": {
+                "default": "0.75",
+                "type": "string",
+                "order": 10,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "This flag allows you to change the likelihood cutoff for phylogenetic placement of reads.",
+                "label": "Placements cuttoff",
+                "argument": "--placements_cutoff ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "RESOLVE_PLACEMENTS",
+            "value": {
+                "default": false,
+                "type": "flag",
+                "order": 11,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Ignore the placements cutoff and simply use the best placement assigned to the read.",
+                "label": "Resolve placements",
+                "argument": "--resolve_placements ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "NO_MERGE_READS",
+            "value": {
+                "default": false,
+                "type": "flag",
+                "order": 12,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "When this flag is specified, the alignment of the forward and reverse reads will not be merged before placement. If paired reads are provided, pair with the most confident placement will be used for classification.",
+                "label": "No merge reads",
+                "argument": "--no_merge_reads ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "MIN_ORF_LENGTH",
+            "value": {
+                "default": "96",
+                "type": "string",
+                "order": 13,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Minimum number of nucleotides in an open reading frame",
+                "label": "Min ORF length",
+                "argument": "--min_orf_length ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "RESTRICT_READ_LENGTH",
+            "value": {
+                "default": "",
+                "type": "string",
+                "order": 14,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Only use this many base pairs at the start of each sequence searched",
+                "label": "Restrict read length",
+                "argument": "--restrict_read_length ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "VERBOSITY",
+            "value": {
+                "default": "4",
+                "type": "enumeration",
+                "order": 15,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "enumValues": [
+                    {
+                        "1": "1 (silent)"
+                    },
+                    {
+                        "2": "2"
+                    },
+                    {
+                        "3": "3"
+                    },
+                    {
+                        "4": "4 (default)"
+                    },
+                    {
+                        "5": "5 (noise)"
+                    }
+                ]
+            },
+            "details": {
+                "description": "",
+                "label": "Search method",
+                "argument": "--verbosity ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "MAX_SAMPLES_FOR_KRONA",
+            "value": {
+                "default": "100",
+                "type": "string",
+                "order": 16,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "If the number of samples is greater than this, do not output KRONA diagram",
+                "label": "Max samples for Krona",
+                "argument": "--max_samples_for_krona ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        }
+    ],
+    "outputs": []
 }
